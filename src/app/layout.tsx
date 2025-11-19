@@ -1,7 +1,7 @@
-"use client";
+import { AuthProvider } from '../contexts/AuthContext';
+import { LanguageProvider } from '../contexts/LanguageContext';
+import { HydrationProvider } from '../contexts/HydrationProvider';
 import type { ReactNode } from "react";
-import { AuthProvider } from "../contexts/AuthContext";
-import { LanguageProvider } from "../contexts/LanguageContext";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -20,11 +20,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </AuthProvider>
+        <HydrationProvider>
+          <AuthProvider>
+            <LanguageProvider>
+              {children}
+            </LanguageProvider>
+          </AuthProvider>
+        </HydrationProvider>
       </body>
     </html>
   );
