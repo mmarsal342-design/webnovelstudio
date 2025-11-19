@@ -566,11 +566,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
-      //{user && (
-        <div style={{ background: "#222", color: "white", padding: 16, borderRadius: 8, marginBottom: 16 }}>
-          <p>✅ Sudah Login! Nama: {user.displayName}</p>
-        </div>
-      )}*/
 
       <GoogleLoginButton />
       {showApiKeyModal && <ApiKeyModal onSave={handleSaveApiKey} onClose={() => setShowApiKeyModal(false)} />}
