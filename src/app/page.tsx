@@ -542,7 +542,7 @@ const App: React.FC = () => {
         
         case 'universeSetup':
             return <UniverseSetup
-                        apiKey={apiKey}
+                        apiKey={apiKey || ''}
                         onSave={handleSaveUniverse}
                         initialData={editingUniverse}
                         onCancel={() => setView('universeHub')}
