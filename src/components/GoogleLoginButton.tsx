@@ -8,13 +8,13 @@ import { auth } from "../lib/firebase";
 export default function GoogleLoginButton() {
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const [signOut, setSignOut] = useState<() => Promise<void> | null>(null);
+  const [signOutFn, setSignOutFn] = useState<any>(null);
 
   useEffect(() => {
     // Get auth data only after mount
     const authContext = useAuth();
     setUser(authContext.user);
-    setSignOut(() => authContext.signOut);
+    setSignOutFn(() => authContext.signOut);
     setMounted(true);
   }, []);
 
@@ -45,7 +45,7 @@ export default function GoogleLoginButton() {
             cursor: "pointer",
             fontWeight: "bold",
           }}
-          onClick={() => signOut?.()}
+          onClick={() => signOutFn?.()}
         >
           🚪 Logout
         </button>
