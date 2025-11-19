@@ -3,6 +3,7 @@
 import { AuthProvider } from "../contexts/AuthContext";
 import { HydrationProvider } from "../contexts/HydrationProvider";
 import { LanguageProvider } from "../contexts/LanguageContext";
+import './globals.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
