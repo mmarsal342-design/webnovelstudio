@@ -15,7 +15,7 @@ export default function GoogleLoginButton() {
   // Kalau SUDAH LOGIN
   if (user) {
     return (
-            <div style={{ textAlign: "center", margin: 16 }}>
+      <div style={{ textAlign: "center", margin: 16 }}>
         <div style={{ color: "white", marginBottom: 12 }}>
           {user && user.displayName ? (
             <>
@@ -27,7 +27,6 @@ export default function GoogleLoginButton() {
           )}
         </div>
 
-        </div>
         <button
           style={{
             background: "#ff6b6b",
@@ -37,7 +36,6 @@ export default function GoogleLoginButton() {
             padding: "8px 16px",
             cursor: "pointer",
             fontWeight: "bold",
-            hover: { background: "#ff5252" }
           }}
           onClick={signOut}
         >
