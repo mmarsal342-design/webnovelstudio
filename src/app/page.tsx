@@ -1,4 +1,5 @@
 "use client";
+import dynamic from 'next/dynamic';
 import { useAuth } from "../contexts/AuthContext";
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import StoryEncyclopediaSetup from '../components/StoryEncyclopediaSetup';
@@ -12,13 +13,16 @@ import { StoryEncyclopedia, Character, Chapter, Universe } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageToggle from '../components/LanguageToggle';
 import { KeyIcon } from '../components/icons/KeyIcon';
-import GoogleLoginButton from "../components/GoogleLoginButton";
 
 // Type aliases for character types
 type LoveInterest = Character;
 type Antagonist = Character;
 
 const API_KEY_STORAGE_KEY = 'google_ai_api_key';
+
+const GoogleLoginButton = dynamic(() => import('../components/GoogleLoginButton'), {
+  ssr: false,
+});
 
 const createEmptyCharacter = (nameOrDesc: string = '', roles: string[] = []): Character => ({
   id: crypto.randomUUID(),
@@ -567,7 +571,9 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
 
-      <GoogleLoginButton />
+      <div suppressHydrationWarning>
+        <GoogleLoginButton />
+      </div>
       {showApiKeyModal && <ApiKeyModal onSave={handleSaveApiKey} onClose={() => setShowApiKeyModal(false)} />}
        
       <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 p-4 sticky top-0 z-20">
