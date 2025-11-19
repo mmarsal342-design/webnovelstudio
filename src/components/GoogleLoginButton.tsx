@@ -13,18 +13,12 @@ export default function GoogleLoginButton() {
   };
 
   // Kalau SUDAH LOGIN
-  if (user) {
+  if (user && (user as any)?.displayName) {
     return (
       <div style={{ textAlign: "center", margin: 16 }}>
         <div style={{ color: "white", marginBottom: 12 }}>
-          {user && user.displayName ? (
-            <>
-              <p>Welcome, <strong>{user.displayName}</strong>!</p>
-              <p style={{ fontSize: "12px", color: "#aaa" }}>{user.email}</p>
-            </>
-          ) : (
-            <p>Loading user info...</p>
-          )}
+          <p>Welcome, <strong>{(user as any).displayName}</strong>!</p>
+          <p style={{ fontSize: "12px", color: "#aaa" }}>{(user as any).email}</p>
         </div>
 
         <button
