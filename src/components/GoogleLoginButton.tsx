@@ -11,10 +11,14 @@ export default function GoogleLoginButton() {
   const [signOutFn, setSignOutFn] = useState<any>(null);
 
   useEffect(() => {
-    // Get auth data only after mount
-    const authContext = useAuth();
-    setUser(authContext.user);
-    setSignOutFn(() => authContext.signOut);
+    try {
+      // Get auth data only after mount
+      const authContext = useAuth();
+      setUser(authContext.user);
+      setSignOutFn(() => authContext.signOut);
+    } catch (error) {
+      console.error("Error getting auth context:", error);
+    }
     setMounted(true);
   }, []);
 
@@ -24,12 +28,14 @@ export default function GoogleLoginButton() {
   };
 
   // Don't render ANYTHING until mounted
-  if (!mounted) return null;
+  if (!mounted) {
+    return <div suppressHydrationWarning></div>;
+  }
 
   // Kalau SUDAH LOGIN
   if (user && user?.displayName) {
     return (
-      <div style={{ textAlign: "center", margin: 16 }}>
+      <div style={{ textAlign: "center", margin: 16 }} suppressHydrationWarning>
         <div style={{ color: "white", marginBottom: 12 }}>
           <p>Welcome, <strong>{user.displayName}</strong>!</p>
           <p style={{ fontSize: "12px", color: "#aaa" }}>{user.email}</p>
@@ -67,6 +73,7 @@ export default function GoogleLoginButton() {
         cursor: "pointer",
       }}
       onClick={signIn}
+      suppressHydrationWarning
     >
       <img
         src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
