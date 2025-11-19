@@ -7,13 +7,16 @@ import { auth } from "../lib/firebase";
 
 export default function GoogleLoginButton() {
   const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [signOut, setSignOut] = useState<() => Promise<void> | null>(null);
 
   useEffect(() => {
+    // Get auth data only after mount
+    const authContext = useAuth();
+    setUser(authContext.user);
+    setSignOut(() => authContext.signOut);
     setMounted(true);
   }, []);
-
-  // ONLY call useAuth AFTER mounted
-  const { user, signOut } = useAuth();
 
   const signIn = () => {
     const provider = new GoogleAuthProvider();
@@ -24,12 +27,12 @@ export default function GoogleLoginButton() {
   if (!mounted) return null;
 
   // Kalau SUDAH LOGIN
-  if (user && (user as any)?.displayName) {
+  if (user && user?.displayName) {
     return (
       <div style={{ textAlign: "center", margin: 16 }}>
         <div style={{ color: "white", marginBottom: 12 }}>
-          <p>Welcome, <strong>{(user as any).displayName}</strong>!</p>
-          <p style={{ fontSize: "12px", color: "#aaa" }}>{(user as any).email}</p>
+          <p>Welcome, <strong>{user.displayName}</strong>!</p>
+          <p style={{ fontSize: "12px", color: "#aaa" }}>{user.email}</p>
         </div>
 
         <button
@@ -42,7 +45,7 @@ export default function GoogleLoginButton() {
             cursor: "pointer",
             fontWeight: "bold",
           }}
-          onClick={signOut}
+          onClick={() => signOut?.()}
         >
           🚪 Logout
         </button>
