@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthProvider } from '../contexts/AuthContext';
 import { LanguageProvider } from '../contexts/LanguageContext';
 import { HydrationProvider } from '../contexts/HydrationProvider';
