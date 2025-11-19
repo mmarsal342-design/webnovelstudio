@@ -27,9 +27,34 @@ export default function GoogleLoginButton() {
     signInWithPopup(auth, provider);
   };
 
-  // Don't render ANYTHING until mounted
+  // Default button while loading
+  const defaultButton = (
+    <button
+      style={{
+        background: "#fff",
+        color: "#333",
+        border: "1px solid #999",
+        borderRadius: 6,
+        padding: "8px 16px",
+        margin: 16,
+        fontWeight: "bold",
+        cursor: "pointer",
+      }}
+      onClick={signIn}
+      suppressHydrationWarning
+    >
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+        alt="Google"
+        style={{ width: 20, verticalAlign: "middle", marginRight: 8 }}
+      />
+      Sign in with Google
+    </button>
+  );
+
+  // Don't render anything until mounted
   if (!mounted) {
-    return <div suppressHydrationWarning></div>;
+    return <div suppressHydrationWarning>{defaultButton}</div>;
   }
 
   // Kalau SUDAH LOGIN
@@ -60,27 +85,5 @@ export default function GoogleLoginButton() {
   }
 
   // Kalau BELUM LOGIN - tampilkan tombol sign in
-  return (
-    <button
-      style={{
-        background: "#fff",
-        color: "#333",
-        border: "1px solid #999",
-        borderRadius: 6,
-        padding: "8px 16px",
-        margin: 16,
-        fontWeight: "bold",
-        cursor: "pointer",
-      }}
-      onClick={signIn}
-      suppressHydrationWarning
-    >
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-        alt="Google"
-        style={{ width: 20, verticalAlign: "middle", marginRight: 8 }}
-      />
-      Sign in with Google
-    </button>
-  );
+  return defaultButton;
 }
