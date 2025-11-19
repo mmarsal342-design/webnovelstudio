@@ -1,7 +1,6 @@
 "use client";
 import dynamic from 'next/dynamic';
-import { useAuth } from "../contexts/AuthContext";
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import StoryEncyclopediaSetup from '../components/StoryEncyclopediaSetup';
 import Dashboard from '../components/Dashboard';
 import WritingStudio from '../components/WritingStudio';
@@ -13,16 +12,18 @@ import { StoryEncyclopedia, Character, Chapter, Universe } from '../types';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageToggle from '../components/LanguageToggle';
 import { KeyIcon } from '../components/icons/KeyIcon';
+import { useAuth } from '../contexts/AuthContext';
+
+// Dynamic import untuk GoogleLoginButton - prevent pre-render issues
+const GoogleLoginButton = dynamic(() => import('../components/GoogleLoginButton'), {
+  ssr: false,
+});
 
 // Type aliases for character types
 type LoveInterest = Character;
 type Antagonist = Character;
 
 const API_KEY_STORAGE_KEY = 'google_ai_api_key';
-
-const GoogleLoginButton = dynamic(() => import('../components/GoogleLoginButton'), {
-  ssr: false,
-});
 
 const createEmptyCharacter = (nameOrDesc: string = '', roles: string[] = []): Character => ({
   id: crypto.randomUUID(),
@@ -158,7 +159,8 @@ const migrateUniverseData = (data: any): Universe => {
 
 type View = 'dashboard' | 'setup' | 'studio' | 'universeHub' | 'universeSetup';
 
-const App: React.FC = () => {
+// Inner component that uses useAuth - this runs only on client
+const AppContent: React.FC = () => {
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [showApiKeyModal, setShowApiKeyModal] = useState<boolean>(false);
   const [stories, setStories] = useState<StoryEncyclopedia[]>([]);
@@ -170,7 +172,7 @@ const App: React.FC = () => {
   const storyFileInputRef = useRef<HTMLInputElement>(null);
   const universeFileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { user } = useAuth(); // NOW THIS IS SAFE - only called on client
 
   // Check for API Key on initial render
   useEffect(() => {
@@ -210,6 +212,14 @@ const App: React.FC = () => {
 
     loadData();
   }, []);
+
+  // Log user for debugging
+  useEffect(() => {
+    if (user) {
+      console.log('User logged in:', (user as any).email);
+      // TODO: Load user's data from Firebase instead of localStorage
+    }
+  }, [user]);
 
   // Save stories to localStorage whenever they change
   useEffect(() => {
@@ -570,10 +580,10 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
-
       <div suppressHydrationWarning>
         <GoogleLoginButton />
       </div>
+
       {showApiKeyModal && <ApiKeyModal onSave={handleSaveApiKey} onClose={() => setShowApiKeyModal(false)} />}
        
       <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 p-4 sticky top-0 z-20">
@@ -619,6 +629,11 @@ const App: React.FC = () => {
       />
     </div>
   );
+};
+
+// Outer component - safe for pre-render
+const App: React.FC = () => {
+  return <AppContent />;
 };
 
 export default App;
