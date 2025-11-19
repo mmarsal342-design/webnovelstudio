@@ -7,6 +7,12 @@ import { auth } from "../lib/firebase";
 
 export default function GoogleLoginButton() {
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // ONLY call useAuth AFTER mounted
   const { user, signOut } = useAuth();
 
   const signIn = () => {
@@ -14,12 +20,8 @@ export default function GoogleLoginButton() {
     signInWithPopup(auth, provider);
   };
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null; // Don't render until client-side
-
+  // Don't render ANYTHING until mounted
+  if (!mounted) return null;
 
   // Kalau SUDAH LOGIN
   if (user && (user as any)?.displayName) {
