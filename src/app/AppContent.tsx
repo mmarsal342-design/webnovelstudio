@@ -579,18 +579,30 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
-      <div suppressHydrationWarning>
+    <div
+      className="min-h-screen flex flex-col font-sans"
+      style={{
+        background: "linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%)",
+        color: "var(--foreground)",
+      }}
+    >
+      <div suppressHydrationWarning className="w-full flex justify-end p-4">
         <GoogleLoginButton />
       </div>
 
       {showApiKeyModal && <ApiKeyModal onSave={handleSaveApiKey} onClose={() => setShowApiKeyModal(false)} />}
-       
-      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 p-4 sticky top-0 z-20">
-        <div className="container mx-auto flex items-center justify-between">
-          <button onClick={handleGoToDashboard} className="flex items-center gap-3">
-            <SparklesIcon className="w-8 h-8 text-indigo-400" />
-            <h1 className="text-xl font-bold text-slate-200">
+
+      <header
+        className="sticky top-0 z-30 w-full backdrop-blur-lg bg-white/70 dark:bg-black/60 border-b border-b-slate-200 dark:border-b-slate-800 shadow-lg"
+        style={{
+          background: "rgba(255,255,255,0.85)",
+          borderBottom: "2px solid var(--color-primary)",
+        }}
+      >
+        <div className="max-w-6xl mx-auto flex items-center justify-between py-4 px-6">
+          <button onClick={handleGoToDashboard} className="flex items-center gap-3 group">
+            <SparklesIcon className="w-8 h-8 text-[var(--color-primary)] group-hover:text-[var(--color-secondary)] transition-colors" />
+            <h1 className="text-2xl font-extrabold tracking-tight text-[var(--color-primary)] group-hover:text-[var(--color-secondary)] transition-colors drop-shadow-lg">
               {t('app.title')}
             </h1>
           </button>
@@ -598,7 +610,7 @@ const AppContent: React.FC = () => {
             {apiKey && (
               <button 
                 onClick={handleChangeApiKey}
-                className="p-2 rounded-full text-slate-400 hover:bg-slate-700 hover:text-indigo-400 transition-colors"
+                className="p-2 rounded-full bg-[var(--color-accent)] text-white hover:bg-[var(--color-secondary)] transition-colors shadow-md"
                 title={t('dashboard.changeApiKey')}
               >
                 <KeyIcon className="w-5 h-5" />
@@ -609,7 +621,7 @@ const AppContent: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex-grow container mx-auto flex overflow-hidden">
+      <main className="flex-grow max-w-6xl mx-auto w-full px-4 py-8 flex flex-col gap-8">
         {renderContent()}
       </main>
 
