@@ -12,11 +12,21 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser);
+    // Set loading false after initial check
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    
     return () => unsubscribe();
-  }, []);
+  }, []); // Empty dependency array - run once!
+
+  if (loading) {
+    return <div>{children}</div>; // Or loading spinner
+  }
 
   return (
     <AuthContext.Provider value={{ user, signOut: () => fbSignOut(auth) }}>
