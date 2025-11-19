@@ -93,7 +93,7 @@ const StoryEncyclopediaSidebar: React.FC<StoryEncyclopediaSidebarProps> = ({ sto
   const { t } = useLanguage();
   
   return (
-    <aside className="w-80 lg:w-96 flex-shrink-0 bg-slate-800 border-r border-slate-700 p-4 flex flex-col h-full">
+    <aside className="w-80 lg:w-96 flex-shrink-0 bg-gradient-to-b from-[var(--color-primary)]/10 to-white/80 border-r border-gray-200 p-4 flex flex-col h-full rounded-xl shadow-lg">
       <div className="flex-shrink-0">
         <div className="flex items-center justify-between gap-3 mb-2">
             <button 

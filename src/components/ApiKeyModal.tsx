@@ -19,14 +19,13 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSave, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-xl max-w-lg w-full p-6 text-center space-y-4" onClick={(e) => e.stopPropagation()}>
-        <div className="mx-auto w-12 h-12 flex items-center justify-center bg-indigo-500/20 rounded-full border border-indigo-500/30">
-            <KeyIcon className="w-6 h-6 text-indigo-400" />
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="card max-w-lg w-full text-center space-y-6 relative" onClick={(e) => e.stopPropagation()}>
+        <div className="mx-auto w-14 h-14 flex items-center justify-center bg-[var(--color-primary)]/10 rounded-full border border-[var(--color-primary)]/30 shadow">
+            <KeyIcon className="w-7 h-7 text-[var(--color-primary)]" />
         </div>
-        <h2 className="text-2xl font-bold text-slate-100">{t('apiKeyModal.title')}</h2>
-        <p className="text-sm text-slate-400">{t('apiKeyModal.instruction')}</p>
-        
+        <h2 className="text-2xl font-extrabold text-[var(--color-primary)] drop-shadow-sm">{t('apiKeyModal.title')}</h2>
+        <p className="text-base text-gray-500 mb-2">{t('apiKeyModal.instruction')}</p>
         <div>
           <input
             type="password"
@@ -34,26 +33,32 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ onSave, onClose }) => {
             onChange={(e) => setKey(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSave()}
             placeholder={t('apiKeyModal.placeholder')}
-            className="w-full bg-slate-700 text-slate-200 placeholder-slate-500 rounded-md p-3 border border-slate-600 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition duration-200"
+            className="w-full bg-white text-gray-700 placeholder-gray-400 rounded-lg p-3 border border-gray-200 shadow focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none transition duration-200"
             autoFocus
           />
           <a
             href="https://aistudio.google.com/app/apikey"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-indigo-400 hover:text-indigo-300 mt-2 inline-block"
+            className="text-xs text-[var(--color-primary)] hover:text-[var(--color-secondary)] mt-2 inline-block"
           >
             {t('apiKeyModal.getApiKey')}
           </a>
         </div>
-        
         <button
           onClick={handleSave}
           disabled={!key.trim()}
-          className="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-indigo-500 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
+          className="btn w-full flex items-center justify-center gap-2 py-3 px-6 text-lg font-bold disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           <SparklesIcon className="w-5 h-5" />
           {t('apiKeyModal.saveButton')}
+        </button>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-[var(--color-primary)] text-xl font-bold bg-transparent border-none cursor-pointer"
+          title="Close"
+        >
+          ×
         </button>
       </div>
     </div>

@@ -78,14 +78,14 @@ const ChapterEditor: React.FC<ChapterEditorProps> = ({ chapter, language, onUpda
   };
 
   return (
-    <div className="flex flex-col h-full max-h-full bg-slate-800 rounded-lg shadow-2xl overflow-hidden border border-slate-700">
-      <div className="p-4 border-b border-slate-700 bg-slate-900/50">
+    <div className="card flex flex-col h-full max-h-full overflow-hidden">
+      <div className="p-4 border-b border-gray-200 bg-white/60">
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder={language === 'id' ? 'Judul Bab' : 'Chapter Title'}
-          className="w-full bg-transparent text-xl font-bold text-slate-100 placeholder-slate-500 focus:outline-none"
+          className="w-full bg-transparent text-2xl font-extrabold text-[var(--color-primary)] placeholder-gray-400 focus:outline-none"
         />
       </div>
       <div className="flex-grow p-1 overflow-y-auto">
@@ -93,11 +93,11 @@ const ChapterEditor: React.FC<ChapterEditorProps> = ({ chapter, language, onUpda
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder={language === 'id' ? 'Mulai tulis bab Anda di sini...' : 'Start writing your chapter here...'}
-          className="w-full h-full bg-slate-800 text-slate-200 placeholder-slate-500 p-4 resize-none focus:outline-none text-base leading-relaxed"
+          className="w-full h-full bg-gray-50 text-gray-700 placeholder-gray-400 p-4 resize-none focus:outline-none text-base leading-relaxed rounded-lg shadow-sm border border-gray-200"
         />
       </div>
-      <div className="flex-shrink-0 p-2 px-4 border-t border-slate-700 bg-slate-900/50 text-xs text-slate-400 flex justify-between items-center">
-        <span>{t('chapterEditor.wordCount')}: {wordCount}</span>
+      <div className="flex-shrink-0 p-2 px-4 border-t border-gray-200 bg-white/60 text-xs text-gray-500 flex justify-between items-center">
+        <span className="font-medium text-[var(--color-secondary)]">{t('chapterEditor.wordCount')}: {wordCount}</span>
         <div className="h-4">
             {renderStatus()}
         </div>
