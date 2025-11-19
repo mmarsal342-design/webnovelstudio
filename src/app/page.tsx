@@ -75,24 +75,24 @@ const migrateStoryData = (data: any): StoryEncyclopedia => {
         if (!parsed.characters.some((c: typeof parsed.characters[0]) => c.name === protagonist.name)) {
     parsed.characters.push(protagonist);
 }
+    }
+if (parsed.loveInterests) {
+    parsed.loveInterests.forEach((li: LoveInterest) => {
+        const loveInterest = ensureFullCharacter(li, ['Love Interest']);
+        if (loveInterest.name && !parsed.characters.some(c => c.name === loveInterest.name)) {
+            parsed.characters.push(loveInterest);
+        }
+    });
+}
 
-    }
-    if (parsed.loveInterests) {
-        parsed.loveInterests.forEach((li: any) => {
-parsed.loveInterests.forEach((li: LoveInterest) => {
-            if (loveInterest.name && !parsed.characters.some(c => c.name === loveInterest.name)) {
-                parsed.characters.push(loveInterest);
-            }
-        });
-    }
-    if (parsed.antagonists) {
-parsed.antagonists.forEach((ant: Antagonist) => {
-            const antagonist = ensureFullCharacter(ant, ['Antagonist']);
-            if (antagonist.name && !parsed.characters.some(c => c.name === antagonist.name)) {
-                parsed.characters.push(antagonist);
-            }
-        });
-    }
+if (parsed.antagonists) {
+    parsed.antagonists.forEach((ant: Antagonist) => {
+        const antagonist = ensureFullCharacter(ant, ['Antagonist']);
+        if (antagonist.name && !parsed.characters.some(c => c.name === antagonist.name)) {
+            parsed.characters.push(antagonist);
+        }
+    });
+}
     delete parsed.protagonist;
     delete parsed.loveInterests;
     delete parsed.antagonists;
