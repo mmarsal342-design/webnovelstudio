@@ -1,6 +1,5 @@
 "use client";
-import { useAuth } from "../contexts/AuthContext";  // ← TAMBAH INI
-// ... import lain yang sudah ada
+import { useAuth } from "../contexts/AuthContext";
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import StoryEncyclopediaSetup from '../components/StoryEncyclopediaSetup';
 import Dashboard from '../components/Dashboard';
@@ -15,6 +14,9 @@ import LanguageToggle from '../components/LanguageToggle';
 import { KeyIcon } from '../components/icons/KeyIcon';
 import GoogleLoginButton from "../components/GoogleLoginButton";
 
+// Type aliases for character types
+type LoveInterest = Character;
+type Antagonist = Character;
 
 const API_KEY_STORAGE_KEY = 'google_ai_api_key';
 
@@ -73,26 +75,28 @@ const migrateStoryData = (data: any): StoryEncyclopedia => {
     if (parsed.protagonist) {
         const protagonist = ensureFullCharacter(parsed.protagonist, ['Protagonist']);
         if (!parsed.characters.some((c: typeof parsed.characters[0]) => c.name === protagonist.name)) {
-    parsed.characters.push(protagonist);
-}
+            parsed.characters.push(protagonist);
+        }
     }
-if (parsed.loveInterests) {
-    parsed.loveInterests.forEach((li: LoveInterest) => {
-        const loveInterest = ensureFullCharacter(li, ['Love Interest']);
-        if (loveInterest.name && !parsed.characters.some(c => c.name === loveInterest.name)) {
-            parsed.characters.push(loveInterest);
-        }
-    });
-}
 
-if (parsed.antagonists) {
-    parsed.antagonists.forEach((ant: Antagonist) => {
-        const antagonist = ensureFullCharacter(ant, ['Antagonist']);
-        if (antagonist.name && !parsed.characters.some(c => c.name === antagonist.name)) {
-            parsed.characters.push(antagonist);
-        }
-    });
-}
+    if (parsed.loveInterests) {
+        parsed.loveInterests.forEach((li: LoveInterest) => {
+            const loveInterest = ensureFullCharacter(li, ['Love Interest']);
+            if (loveInterest.name && !parsed.characters.some(c => c.name === loveInterest.name)) {
+                parsed.characters.push(loveInterest);
+            }
+        });
+    }
+
+    if (parsed.antagonists) {
+        parsed.antagonists.forEach((ant: Antagonist) => {
+            const antagonist = ensureFullCharacter(ant, ['Antagonist']);
+            if (antagonist.name && !parsed.characters.some(c => c.name === antagonist.name)) {
+                parsed.characters.push(antagonist);
+            }
+        });
+    }
+
     delete parsed.protagonist;
     delete parsed.loveInterests;
     delete parsed.antagonists;
@@ -162,6 +166,7 @@ const App: React.FC = () => {
   const storyFileInputRef = useRef<HTMLInputElement>(null);
   const universeFileInputRef = useRef<HTMLInputElement>(null);
   const { t } = useLanguage();
+  const { user } = useAuth();
 
   // Check for API Key on initial render
   useEffect(() => {
@@ -204,7 +209,7 @@ const App: React.FC = () => {
 
   // Save stories to localStorage whenever they change
   useEffect(() => {
-    if (stories.length > 0) { // Avoid saving the initial empty state
+    if (stories.length > 0) {
         try {
             localStorage.setItem('webnovel_stories', JSON.stringify(stories));
         } catch (error) {
@@ -215,7 +220,7 @@ const App: React.FC = () => {
   
   // Save universes to localStorage whenever they change
   useEffect(() => {
-    if (universes.length > 0) { // Avoid saving the initial empty state
+    if (universes.length > 0) {
         try {
             localStorage.setItem('webnovel_universes', JSON.stringify(universes));
         } catch (error) {
@@ -474,7 +479,7 @@ const App: React.FC = () => {
                   chapters: chapters.length > 0 ? chapters : [{id: crypto.randomUUID(), title: 'Chapter 1', content: ''}],
               };
 
-              handleStorySave(newStory); // Save and update state
+              handleStorySave(newStory);
               alert(t('dashboard.importSuccess', { title: newStory.title }));
           } catch (error) {
               alert(`${t('dashboard.importError')}: ${error instanceof Error ? error.message : "Unknown error"}`);
@@ -493,8 +498,6 @@ const App: React.FC = () => {
   const activeStory = stories.find(s => s.id === activeStoryId);
   const editingStory = stories.find(s => s.id === editingStoryId);
   const editingUniverse = universes.find(u => u.id === editingUniverseId);
-  
-  const { user } = useAuth();  // ← TAMBAH INI SATU BARIS
 
   const renderContent = () => {
     switch(view) {
@@ -564,13 +567,13 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col font-sans">
       {user && (
-  <div style={{ background: "#222", color: "white", padding: 16, borderRadius: 8, marginBottom: 16 }}>
-    <p>✅ Sudah Login! Nama: {user.displayName}</p>
-  </div>
-)}
+        <div style={{ background: "#222", color: "white", padding: 16, borderRadius: 8, marginBottom: 16 }}>
+          <p>✅ Sudah Login! Nama: {user.displayName}</p>
+        </div>
+      )}
 
       <GoogleLoginButton />
-       {showApiKeyModal && <ApiKeyModal onSave={handleSaveApiKey} onClose={() => setShowApiKeyModal(false)} />}
+      {showApiKeyModal && <ApiKeyModal onSave={handleSaveApiKey} onClose={() => setShowApiKeyModal(false)} />}
        
       <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700 p-4 sticky top-0 z-20">
         <div className="container mx-auto flex items-center justify-between">
@@ -594,9 +597,11 @@ const App: React.FC = () => {
           </div>
         </div>
       </header>
+
       <main className="flex-grow container mx-auto flex overflow-hidden">
         {renderContent()}
       </main>
+
       <input 
         type="file" 
         ref={storyFileInputRef} 
