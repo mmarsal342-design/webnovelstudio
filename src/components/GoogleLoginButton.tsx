@@ -1,16 +1,21 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import { useAuth } from "../contexts/AuthContext";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../lib/firebase";
 
 export default function GoogleLoginButton() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null; // Don't render until client-side
+
   const { user, signOut } = useAuth();
 
-  const signIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-  };
 
   // Kalau SUDAH LOGIN
   if (user && (user as any)?.displayName) {
