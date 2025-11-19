@@ -15,14 +15,3 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </HydrationProvider>
   );
 }
-
-  return (
-    <HydrationProvider>
-      <AuthProvider>
-        <LanguageProvider>
-          {children}
-        </LanguageProvider>
-      </AuthProvider>
-    </HydrationProvider>
-  );
-}
