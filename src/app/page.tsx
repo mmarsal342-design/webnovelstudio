@@ -72,7 +72,7 @@ const migrateStoryData = (data: any): StoryEncyclopedia => {
     
     if (parsed.protagonist) {
         const protagonist = ensureFullCharacter(parsed.protagonist, ['Protagonist']);
-        if (!parsed.characters.some(c => c.name === protagonist.name)) {
+        if (!parsed.characters.some((c: Character) => c.name === protagonist.name)) {
             parsed.characters.push(protagonist);
         }
     }
