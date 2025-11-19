@@ -7,14 +7,18 @@ import { auth } from "../lib/firebase";
 
 export default function GoogleLoginButton() {
   const [mounted, setMounted] = useState(false);
-  
+  const { user, signOut } = useAuth();
+
+  const signIn = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider);
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) return null; // Don't render until client-side
-
-  const { user, signOut } = useAuth();
 
 
   // Kalau SUDAH LOGIN
