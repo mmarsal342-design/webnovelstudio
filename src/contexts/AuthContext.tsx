@@ -6,6 +6,7 @@ import { User } from "firebase/auth";
 interface AuthContextType {
   user: User | null;
   signOut: () => Promise<void>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -16,20 +17,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Set loading false after initial check
+    let isMounted = true;
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
+      if (isMounted) {
+        setUser(currentUser);
+        setLoading(false);
+      }
     });
     
-    return () => unsubscribe();
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
   }, []); // Empty dependency array - run once!
 
-  if (loading) {
-    return <div>{children}</div>; // Or loading spinner
-  }
+  const value: AuthContextType = {
+    user,
+    signOut: () => fbSignOut(auth),
+    loading,
+  };
 
   return (
-    <AuthContext.Provider value={{ user, signOut: () => fbSignOut(auth) }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
