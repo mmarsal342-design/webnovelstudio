@@ -12,9 +12,13 @@ export default function GoogleLoginButton() {
   const user = authContext?.user ?? null;
   const signOutFn = authContext?.signOut ?? null;
 
-  const signIn = () => {
+  const signIn = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (err) {
+      alert("Google Sign-In gagal: " + (err as Error).message);
+    }
   };
 
   // Default button ALWAYS visible
