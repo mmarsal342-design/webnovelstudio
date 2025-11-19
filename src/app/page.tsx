@@ -82,7 +82,7 @@ const migrateStoryData = (data: any): StoryEncyclopedia => {
     if (parsed.loveInterests) {
         parsed.loveInterests.forEach((li: LoveInterest) => {
             const loveInterest = ensureFullCharacter(li, ['Love Interest']);
-            if (loveInterest.name && !parsed.characters.some(c => c.name === loveInterest.name)) {
+            if (loveInterest.name && !parsed.characters.some((c: Character) => c.name === loveInterest.name)) {
                 parsed.characters.push(loveInterest);
             }
         });
@@ -91,7 +91,7 @@ const migrateStoryData = (data: any): StoryEncyclopedia => {
     if (parsed.antagonists) {
         parsed.antagonists.forEach((ant: Antagonist) => {
             const antagonist = ensureFullCharacter(ant, ['Antagonist']);
-            if (antagonist.name && !parsed.characters.some(c => c.name === antagonist.name)) {
+            if (antagonist.name && !parsed.characters.some((c: Character) => c.name === antagonist.name)) {
                 parsed.characters.push(antagonist);
             }
         });
